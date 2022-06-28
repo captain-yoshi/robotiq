@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<robot name="robotiq_agc_apl_159_002" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find robotiq_description)/urdf/robotiq_agc_apl_159_002/robotiq_agc_apl_159_002_common.xacro" />
+
+  <xacro:macro name="robotiq_agc_apl_159_002" params="prefix visual_parameters_file">
+
+    <!-- Load configuration data from the provided .yaml files -->
+    <xacro:read_model_data
+      visual_parameters_file="${visual_parameters_file}"/>
+
+    <link name="${prefix}mounting_plate">
+      <inertial>
+        <origin xyz="0.0154561980005085 -2.39874465854351E-08 -5.45937031412302E-05" rpy="0 0 0" />
+        <mass value="0.0984718698874868" />
+        <inertia
+          ixx="0"
+          ixy="0"
+          ixz="0"
+          iyy="0"
+          iyz="0"
+          izz="0" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${mounting_plate_visual_mesh}" />
+        </geometry>
+        <material name="${mounting_plate_visual_material_name}">
+          <color rgba="${mounting_plate_visual_material_color}" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${mounting_plate_collision_mesh}" />
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}left_flange" />
+    <link name="${prefix}right_flange" />
+
+    <joint name="${prefix}left_flange_joint" type="fixed">
+      <origin xyz="0.027 0.043 0" rpy="0 0 ${pi/4}" />
+      <parent link="${prefix}mounting_plate" />
+      <child link="${prefix}left_flange" />
+    </joint>
+
+    <joint name="${prefix}right_flange_joint" type="fixed">
+      <origin xyz="0.027 -0.043 0" rpy="0 0 ${-pi/4}" />
+      <parent link="${prefix}mounting_plate" />
+      <child link="${prefix}right_flange" />
+    </joint>
+  </xacro:macro>
+</robot>

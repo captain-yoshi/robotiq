@@ -1,0 +1,18 @@
+mesh_files:
+  mounting_plate:
+    visual:
+      mesh: "package://robotiq_description/meshes/robotiq_ft_300/visual/fts_300_cpl_062.dae"
+      material:
+        name: ""
+        color: "0.0392156862745098 0.0392156862745098 0.0392156862745098 1" 
+    collision:
+      mesh: "package://robotiq_description/meshes/robotiq_ft_300/collision/fts_300_cpl_062.stl"
+
+  sensor:
+    visual:
+      mesh: "package://robotiq_description/meshes/robotiq_ft_300/visual/sensor.dae"
+      material:
+        name: "" 
+        color: "0.79216 0.81961 0.93333 1"
+    collision:
+      mesh: "package://robotiq_description/meshes/robotiq_ft_300/collision/sensor.stl"

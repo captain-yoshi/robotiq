@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<robot name="robotiq_2f_140" xmlns:xacro="http://ros.org/wiki/xacro">
+  <!--
+    This is a convenience top-level xacro which loads the macro for the Robotiq
+    2f-140.
+
+    This file is only useful when loading a stand-alone, completely isolated
+    robot with only default values for all parameters such as the kinematics,
+    visual and physical parameters and joint limits.
+
+    This file is not intended to be integrated into a larger scene or other
+    composite xacro.
+
+    Instead, xacro:include 'inc/robotiq_2f_140_macro.xacro' and override the defaults
+    for the arguments to that macro.
+  -->
+  <xacro:include filename="$(find robotiq_description)/urdf/robotiq_2f_140/inc/robotiq_2f_140_macro.xacro" />
+
+  <xacro:robotiq_2f_140
+    prefix=""
+    visual_parameters_file="$(find robotiq_description)/config/robotiq_2f_140/visual_parameters.yaml"/>
+</robot>

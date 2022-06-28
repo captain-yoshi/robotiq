@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <!--
+    NOTE: the macros defined in this file are NOT part of the public API of this
+          package. Users CANNOT rely on this file being available, or stored in
+          this location. Nor can they rely on the existence of the two macros.
+
+    Author: Ludovic Delval
+    Contributor: Felix Messmer
+  -->
+
+
+  <!--
+    NOTE: this macro stores the defined properties in the scope of the caller.
+          However, users MUST NOT rely on these properties, their contents or
+          their names.
+
+          This macro is NOT part of the public API of the ur_description pkg,
+          and as such should be considered to be for internal use only.
+  -->
+  <xacro:macro name="read_model_data" params="visual_parameters_file">
+    <!-- Read .yaml files from disk, load content into properties -->
+    <xacro:property name="config_visual_parameters" value="${xacro.load_yaml(visual_parameters_file)}"/>
+
+    <!-- Extract subsections from yaml dictionaries -->
+    <xacro:property name="sec_mesh_files" value="${config_visual_parameters['mesh_files']}" />
+
+    <!-- Mesh files -->
+    <xacro:property name="mounting_plate_mesh" value="${sec_mesh_files['mounting_plate']}"/>
+    <xacro:property name="mounting_plate_visual_mesh" value="${mounting_plate_mesh['visual']['mesh']}" scope="parent"/>
+    <xacro:property name="mounting_plate_visual_material_name" value="${mounting_plate_mesh['visual']['material']['name']}" scope="parent"/>
+    <xacro:property name="mounting_plate_visual_material_color" value="${mounting_plate_mesh['visual']['material']['color']}" scope="parent"/>
+    <xacro:property name="mounting_plate_collision_mesh" value="${mounting_plate_mesh['collision']['mesh']}" scope="parent"/>
+
+  </xacro:macro>
+</robot>

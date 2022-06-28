@@ -1,0 +1,54 @@
+mesh_files:
+  base:
+    visual:
+      mesh: "package://robotiq_description/meshes/robotiq_2f_140/visual/base.dae"
+      material:
+        name: ""
+        color: "0.752941176470588 0.752941176470588 0.752941176470588 1"
+    collision:
+      mesh: "package://robotiq_description/meshes/robotiq_2f_140/collision/base.stl"
+
+  outer_knuckle:
+    visual:
+      mesh: "package://robotiq_description/meshes/robotiq_2f_140/visual/outer_knuckle.dae"
+      material:
+        name: "" 
+        color: "0.792156862745098 0.819607843137255 0.933333333333333 1"
+    collision:
+      mesh: "package://robotiq_description/meshes/robotiq_2f_140/collision/outer_knuckle.stl"
+
+  outer_finger:
+    visual:
+      mesh: "package://robotiq_description/meshes/robotiq_2f_140/visual/outer_finger.dae"
+      material:
+        name: ""
+        color: "0.752941176470588 0.752941176470588 0.752941176470588 1"
+    collision:
+      mesh: "package://robotiq_description/meshes/robotiq_2f_140/collision/outer_finger.stl"
+
+  inner_knuckle:
+    visual:
+      mesh: "package://robotiq_description/meshes/robotiq_2f_140/visual/inner_knuckle.dae"
+      material:
+        name: ""
+        color: "0.752941176470588 0.752941176470588 0.752941176470588 1"
+    collision:
+      mesh: "package://robotiq_description/meshes/robotiq_2f_140/collision/inner_knuckle.stl"
+
+  inner_finger:
+    visual:
+      mesh: "package://robotiq_description/meshes/robotiq_2f_140/visual/inner_finger.dae"
+      material:
+        name: ""
+        color: "0.752941176470588 0.752941176470588 0.752941176470588 1"
+    collision:
+      mesh: "package://robotiq_description/meshes/robotiq_2f_140/collision/inner_finger.stl"
+
+  fingertip:
+    visual:
+      mesh: "package://robotiq_description/meshes/robotiq_2f_140/visual/fingertip.dae"
+      material:
+        name: ""
+        color: "0.792156862745098 0.819607843137255 0.933333333333333 1"
+    collision:
+      mesh: "package://robotiq_description/meshes/robotiq_2f_140/collision/fingertip.stl"

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>robotiq_description</name>
+  <version>0.0.0</version>
+  <description>URDF description for Robotiq products</description>
+
+  <author>Captain Yoshi</author>
+  <maintainer email="captain.yoshisaur@gmail.com">Captain Yoshi</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>joint_state_publisher_gui</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>urdf</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
+</package>

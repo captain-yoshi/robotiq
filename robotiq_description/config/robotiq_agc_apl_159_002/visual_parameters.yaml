@@ -1,0 +1,9 @@
+mesh_files:
+  mounting_plate:
+    visual:
+      mesh: "package://robotiq_description/meshes/robotiq_agc_apl_159_002/visual/agc_apl_159_002.dae"
+      material:
+        name: ""
+        color: "0.792156862745098 0.819607843137255 0.933333333333333 1"
+    collision:
+      mesh: "package://robotiq_description/meshes/robotiq_agc_apl_159_002/collision/agc_apl_159_002.stl"
