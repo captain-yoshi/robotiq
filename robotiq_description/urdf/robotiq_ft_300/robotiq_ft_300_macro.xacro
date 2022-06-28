@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <robot name="robotiq_ft_300" xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:include filename="$(find robotiq_description)/urdf/robotiq_ft_300/robotiq_ft_300_common.xacro" />
 
   <xacro:macro name="robotiq_ft_300" params="prefix visual_parameters_file">
+    <xacro:include filename="$(find robotiq_description)/urdf/robotiq_ft_300/robotiq_ft_300_common.xacro" />
 
     <!-- Load configuration data from the provided .yaml files -->
     <xacro:read_model_data
