@@ -8,7 +8,7 @@
     <xacro:read_model_data
       visual_parameters_file="${visual_parameters_file}"/>
 
-    <link name="${prefix}mounting_plate">
+    <link name="${prefix}robotside">
       <inertial>
         <origin xyz="0.0154561980005085 -2.39874465854351E-08 -5.45937031412302E-05" rpy="0 0 0" />
         <mass value="0.0984718698874868" />
@@ -37,19 +37,19 @@
       </collision>
     </link>
 
-    <link name="${prefix}left_flange" />
-    <link name="${prefix}right_flange" />
+    <link name="${prefix}toolside_left" />
+    <link name="${prefix}toolside_right" />
 
-    <joint name="${prefix}left_flange_joint" type="fixed">
+    <joint name="${prefix}toolside_left_joint" type="fixed">
       <origin xyz="0.027 0.043 0" rpy="0 0 ${pi/4}" />
-      <parent link="${prefix}mounting_plate" />
-      <child link="${prefix}left_flange" />
+      <parent link="${prefix}robotside" />
+      <child link="${prefix}toolside_left" />
     </joint>
 
-    <joint name="${prefix}right_flange_joint" type="fixed">
+    <joint name="${prefix}toolside_right_joint" type="fixed">
       <origin xyz="0.027 -0.043 0" rpy="0 0 ${-pi/4}" />
-      <parent link="${prefix}mounting_plate" />
-      <child link="${prefix}right_flange" />
+      <parent link="${prefix}robotside" />
+      <child link="${prefix}toolside_right" />
     </joint>
   </xacro:macro>
 </robot>

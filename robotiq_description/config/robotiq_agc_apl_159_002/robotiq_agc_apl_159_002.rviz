@@ -61,11 +61,11 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        left_flange:
+        robotside:
           Value: true
-        mounting_plate:
+        toolside_left:
           Value: true
-        right_flange:
+        toolside_right:
           Value: true
       Marker Alpha: 1
       Marker Scale: 0.20000000298023224
@@ -74,10 +74,10 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        mounting_plate:
-          left_flange:
+        robotside:
+          toolside_left:
             {}
-          right_flange:
+          toolside_right:
             {}
       Update Interval: 0
       Value: true
@@ -91,16 +91,16 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        left_flange:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        mounting_plate:
+        robotside:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_flange:
+        toolside_left:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        toolside_right:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -114,7 +114,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: mounting_plate
+    Fixed Frame: robotside
     Frame Rate: 30
   Name: root
   Tools:
