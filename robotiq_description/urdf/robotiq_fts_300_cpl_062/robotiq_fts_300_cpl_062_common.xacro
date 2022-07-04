@@ -26,11 +26,11 @@
     <xacro:property name="sec_mesh_files" value="${config_visual_parameters['mesh_files']}" />
 
     <!-- Mesh files -->
-    <xacro:property name="sensor_mesh" value="${sec_mesh_files['sensor']}"/>
-    <xacro:property name="sensor_visual_mesh" value="${sensor_mesh['visual']['mesh']}" scope="parent"/>
-    <xacro:property name="sensor_visual_material_name" value="${sensor_mesh['visual']['material']['name']}" scope="parent"/>
-    <xacro:property name="sensor_visual_material_color" value="${sensor_mesh['visual']['material']['color']}" scope="parent"/>
-    <xacro:property name="sensor_collision_mesh" value="${sensor_mesh['collision']['mesh']}" scope="parent"/>
+    <xacro:property name="mounting_plate_mesh" value="${sec_mesh_files['mounting_plate']}"/>
+    <xacro:property name="mounting_plate_visual_mesh" value="${mounting_plate_mesh['visual']['mesh']}" scope="parent"/>
+    <xacro:property name="mounting_plate_visual_material_name" value="${mounting_plate_mesh['visual']['material']['name']}" scope="parent"/>
+    <xacro:property name="mounting_plate_visual_material_color" value="${mounting_plate_mesh['visual']['material']['color']}" scope="parent"/>
+    <xacro:property name="mounting_plate_collision_mesh" value="${mounting_plate_mesh['collision']['mesh']}" scope="parent"/>
 
   </xacro:macro>
 </robot>

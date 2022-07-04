@@ -1,0 +1,9 @@
+mesh_files:
+  mounting_plate:
+    visual:
+      mesh: "package://robotiq_description/meshes/robotiq_fts_300_cpl_062/visual/fts_300_cpl_062.dae"
+      material:
+        name: ""
+        color: "0.0392156862745098 0.0392156862745098 0.0392156862745098 1"
+    collision:
+      mesh: "package://robotiq_description/meshes/robotiq_fts_300_cpl_062/collision/fts_300_cpl_062.stl"

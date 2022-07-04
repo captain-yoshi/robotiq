@@ -8,40 +8,7 @@
     <xacro:read_model_data
       visual_parameters_file="${visual_parameters_file}"/>
 
-
-    <!-- Link representing the FT300 mounting plate for Universal Robots -->
-    <link name="${prefix}mounting_plate">
-      <inertial>
-        <origin xyz="0.00227643166121317 -0.00163641909670073 -0.000186465195632485" rpy="0 0 0" />
-        <mass value="0.0212636185801172" />
-        <inertia
-          ixx="0"
-          ixy="0"
-          ixz="0"
-          iyy="0"
-          iyz="0"
-          izz="0" />
-      </inertial>
-      <visual>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="${mounting_plate_visual_mesh}" />
-        </geometry>
-        <material name="${mounting_plate_visual_material_name}">
-          <color rgba="${mounting_plate_visual_material_color}" />
-        </material>
-      </visual>
-      <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="${mounting_plate_collision_mesh}" />
-        </geometry>
-      </collision>
-    </link>
-
-
-    <!-- Link representing the FT300 force-torque sensor -->
-    <link name="${prefix}sensor">
+    <link name="${prefix}robotside">
       <inertial>
         <origin xyz="0.01987 -0.00039088 -0.00013094" rpy="0 0 0" />
         <mass value="0.087805" />
@@ -54,7 +21,7 @@
           izz="0" />
       </inertial>
       <visual>
-        <origin xyz="${-(0.0375 - 0.0027)} 0 0" rpy="0 0 0" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <mesh filename="${sensor_visual_mesh}" />
         </geometry>
@@ -63,21 +30,22 @@
         </material>
       </visual>
       <collision>
-        <origin xyz="${-(0.0375 - 0.0027)} 0 0" rpy="0 0 0" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <mesh filename="${sensor_collision_mesh}" />
         </geometry>
       </collision>
     </link>
 
+    <link name="${prefix}toolside"/>
 
-    <!-- Connect force sensor with mounting/coupling plate -->
-    <joint name="${prefix}mounting_plate" type="fixed">
-      <origin xyz="0.0375 0 0" rpy="0 0 0" />
-      <parent link="${prefix}mounting_plate" />
-      <child link="${prefix}sensor" />
+    <link name="${prefix}frame_id"/>
+
+    <joint name="${prefix}toolside_joint" type="fixed">
+      <origin xyz="0.0348 0 0" rpy="0 0 0" />
+      <parent link="${prefix}robotside" />
+      <child link="${prefix}toolside" />
     </joint>
-
 
     <!-- FORCE REFERENCE FRAME
         As specified in the documentation:
@@ -85,15 +53,11 @@
         - The X axis traces a symmetric line centered on the connector; the positive direction
             points the opposite way away from the connector.
         - The Y axis uses the right hand thumb rule according to X-Z. -->
-    <joint name="${prefix}measurment_joint" type="fixed">
+    <joint name="${prefix}frame_id_joint" type="fixed">
       <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
-      <parent link="${prefix}sensor" />
-      <child link="${prefix}ft_frame_id" />
+      <parent link="${prefix}robotside" />
+      <child link="${prefix}frame_id" />
     </joint>
-
-    <link name="${prefix}ft_frame_id"/>
-
-
 
   </xacro:macro>
 </robot>

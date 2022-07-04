@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<robot name="robotiq_fts_300_cpl_062" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find robotiq_description)/urdf/robotiq_fts_300_cpl_062/robotiq_fts_300_cpl_062_macro.xacro" />
+
+  <xacro:robotiq_fts_300_cpl_062
+    prefix=""
+    visual_parameters_file="$(find robotiq_description)/config/robotiq_fts_300_cpl_062/visual_parameters.yaml"/>
+</robot>
