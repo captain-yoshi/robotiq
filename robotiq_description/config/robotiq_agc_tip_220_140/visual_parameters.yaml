@@ -1,0 +1,9 @@
+mesh_files:
+  fingertip_pad:
+    visual:
+      mesh: "package://robotiq_description/meshes/robotiq_agc_tip_220_140/visual/agc_tip_220_140.dae"
+      material:
+        name: ""
+        color: "0.0392156862745098 0.0392156862745098 0.0392156862745098 1"
+    collision:
+      mesh: "package://robotiq_description/meshes/robotiq_agc_tip_220_140/collision/agc_tip_220_140.stl"
