@@ -7,7 +7,7 @@
 class Robotiq2fGripperJointStatePublisher {
 public:
   Robotiq2fGripperJointStatePublisher(ros::NodeHandle nh) {
-    joint_name_vector.push_back("robotiq_2f140_finger_joint");
+    joint_name_vector.push_back("robotiq_2f140_left_outer_knuckle_joint");
 
     out_joint_state_.name.resize(joint_name_vector.size());
     out_joint_state_.position.resize(joint_name_vector.size());
