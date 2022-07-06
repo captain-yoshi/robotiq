@@ -220,7 +220,7 @@
         <child link="${prefix}${fingerprefix}_inner_knuckle" />
         <axis xyz="0 0 1" />
         <limit lower="-3.14" upper="3.14" velocity="2.0" effort="176" />
-        <mimic joint="${prefix}finger_joint" multiplier="${1}" offset="0" />
+        <mimic joint="${prefix}left_outer_knuckle_joint" multiplier="${1}" offset="0" />
       </joint>
     </xacro:macro>
 
@@ -231,7 +231,7 @@
         <child link="${prefix}${fingerprefix}_inner_finger" />
         <axis xyz="0 0 1" />
         <limit lower="-3.14" upper="3.14" velocity="2.0" effort="176" />
-        <mimic joint="${prefix}finger_joint" multiplier="-1" offset="0" />
+        <mimic joint="${prefix}left_outer_knuckle_joint" multiplier="-1" offset="0" />
       </joint>
     </xacro:macro>
 
@@ -258,8 +258,9 @@
       <xacro:inner_knuckle prefix="${prefix}" fingerprefix="${fingerprefix}"/>
     </xacro:macro>
 
-    <xacro:macro name="finger_joint" params="prefix">
-      <joint name="${prefix}finger_joint" type="revolute">
+    <!-- Actuated joint -->
+    <xacro:macro name="left_outer_knuckle_joint" params="prefix">
+      <joint name="${prefix}left_outer_knuckle_joint" type="revolute">
         <origin xyz="0.062905 0.030601 0" rpy="0 ${pi} ${pi}" />
         <parent link="${prefix}base_link" />
         <child link="${prefix}left_outer_knuckle" />
@@ -276,7 +277,7 @@
         <child link="${prefix}right_outer_knuckle" />
         <axis xyz="0 0 1" />
         <limit lower="-3.14" upper="3.14" velocity="2.0" effort="176" />
-        <mimic joint="${prefix}finger_joint" multiplier="1" offset="0" />
+        <mimic joint="${prefix}left_outer_knuckle_joint" multiplier="1" offset="0" />
       </joint>
       <xacro:finger_joints prefix="${prefix}" fingerprefix="right" reflect="-1.0"/>
     </xacro:macro>
@@ -286,7 +287,7 @@
     <xacro:finger_links prefix="${prefix}" fingerprefix="left"/>
     <xacro:finger_links prefix="${prefix}" fingerprefix="right"/>
     <xacro:tcp prefix="${prefix}"/>
-    <xacro:finger_joint prefix="${prefix}"/>
+    <xacro:left_outer_knuckle_joint prefix="${prefix}"/>
     <xacro:right_outer_knuckle_joint prefix="${prefix}"/>
     <xacro:robotiq_2f_140_transmission prefix="${prefix}"/>
   </xacro:macro>
