@@ -15,8 +15,14 @@
     for the arguments to that macro.
   -->
   <xacro:include filename="$(find robotiq_description)/urdf/robotiq_2f_140/inc/robotiq_2f_140_macro.xacro" />
+  <xacro:include filename="$(find robotiq_description)/urdf/robotiq_agc_tip_220_140/robotiq_agc_tip_220_140_macro.xacro" />
 
   <xacro:robotiq_2f_140
     prefix=""
-    visual_parameters_file="$(find robotiq_description)/config/robotiq_2f_140/visual_parameters.yaml"/>
+    visual_parameters_file="$(find robotiq_description)/config/robotiq_2f_140/visual_parameters.yaml"
+    fingertip_pad_macro_name="robotiq_agc_tip_220_140"
+    fingertip_pad_macro_attribute_visual_parameters_file="$(find robotiq_description)/config/robotiq_agc_tip_220_140/visual_parameters.yaml"/>
+
+
+
 </robot>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:macro name="robotiq_2f_140" params="prefix visual_parameters_file">
+  <xacro:macro name="robotiq_2f_140" params="prefix visual_parameters_file fingertip_pad_macro_name fingertip_pad_macro_attribute_visual_parameters_file">
     <xacro:include filename="$(find robotiq_description)/urdf/robotiq_2f_140/inc/robotiq_2f_140_transmission.xacro" />
     <xacro:include filename="$(find robotiq_description)/urdf/robotiq_2f_140/inc/robotiq_2f_140_common.xacro" />
 
@@ -243,11 +243,20 @@
       </joint>
     </xacro:macro>
 
+    <xacro:macro name="fingertip_pad_joint" params="prefix fingerprefix">
+      <joint name="${prefix}${fingerprefix}_fingertip_pad_joint" type="fixed">
+        <origin xyz="0 0.00476 0 " rpy="0 0 0" />
+        <parent link="${prefix}${fingerprefix}_fingertip" />
+        <child link="${prefix}${fingerprefix}_fingertip_pad" />
+      </joint>
+    </xacro:macro>
+
     <xacro:macro name="finger_joints" params="prefix fingerprefix reflect">
       <xacro:outer_finger_joint prefix="${prefix}" fingerprefix="${fingerprefix}"/>
       <xacro:inner_knuckle_joint prefix="${prefix}" fingerprefix="${fingerprefix}" reflect="${reflect}"/>
       <xacro:inner_finger_joint prefix="${prefix}" fingerprefix="${fingerprefix}"/>
       <xacro:fingertip_joint prefix="${prefix}" fingerprefix="${fingerprefix}"/>
+      <xacro:fingertip_pad_joint prefix="${prefix}" fingerprefix="${fingerprefix}"/>
     </xacro:macro>
 
     <xacro:macro name="finger_links" params="prefix fingerprefix">
@@ -256,6 +265,7 @@
       <xacro:inner_finger prefix="${prefix}" fingerprefix="${fingerprefix}"/>
       <xacro:fingertip prefix="${prefix}" fingerprefix="${fingerprefix}"/>
       <xacro:inner_knuckle prefix="${prefix}" fingerprefix="${fingerprefix}"/>
+      <xacro:element xacro:name="xacro:${fingertip_pad_macro_name}" prefix="${prefix}${fingerprefix}_" visual_parameters_file="${fingertip_pad_macro_attribute_visual_parameters_file}"/>
     </xacro:macro>
 
     <!-- Actuated joint -->
