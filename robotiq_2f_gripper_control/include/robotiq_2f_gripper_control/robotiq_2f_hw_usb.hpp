@@ -91,7 +91,6 @@ public:
 			timeout++;
 			if (timeout > 50)
 			{
-				//ROS_WARN("Timeout");
 				std::cout << "After 5seg, the USB device dind't get activated, quit." << std::endl;
 				return false;
 			}
@@ -126,9 +125,7 @@ public:
 
 	void readOutput(uint8_t* map_in_)
 	{
-		ROS_WARN("ISHH");
 		int rc = modbus_read_registers(ctx_ptr_, CMD_ADDR, 3, buf_msr_);
-ROS_WARN("beta");
 		if(rc < 0)
 		{
 			ROS_FATAL("Couldn't read the last state on the USB device");

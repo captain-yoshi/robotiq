@@ -254,10 +254,6 @@ void Robotiq2FGripperActionServer::analysisCB(const GripperInput::ConstPtr& msg)
     // If commanded to move and if at a goal state and if the position request matches the echo'd PR, we're
     // done with a move
 
-    ROS_INFO("gPO = %d", current_reg_state_.gPO);
-    ROS_INFO("rPR = %d", goal_reg_state_.rPR );
-    ROS_INFO("pos_offset = %d", gripper_params_.pos_offset );
-
     // TODO change because we have 3 functions depending on the position
     double max_tol = ((goal_reg_state_.rPR - gripper_params_.pos_offset + gripper_params_.pos_nl_offset - gripper_params_.pos_tol_closed)-228.260379) /-1526.308005;
     double min_tol = ((goal_reg_state_.rPR - gripper_params_.pos_offset + gripper_params_.pos_nl_offset + gripper_params_.pos_tol_open)-228.260379) /-1526.308005;
@@ -267,9 +263,6 @@ void Robotiq2FGripperActionServer::analysisCB(const GripperInput::ConstPtr& msg)
     if (static_cast<int16_t>(current_reg_state_.gPO) >= (static_cast<int16_t>(goal_reg_state_.rPR) - gripper_params_.pos_offset + gripper_params_.pos_nl_offset - gripper_params_.pos_tol_closed) && 
         static_cast<int16_t>(current_reg_state_.gPO) <= (static_cast<int16_t>(goal_reg_state_.rPR) - gripper_params_.pos_offset + gripper_params_.pos_nl_offset + gripper_params_.pos_tol_open))  
     {
-
-      ROS_INFO("%s succeeded", action_name_.c_str());
-      ROS_INFO("Gripper is between %f and %f meters. Current position is %f meters.", min_tol, max_tol, curr_pos);
 
       as_.setSucceeded(registerStateToResult(current_reg_state_,
                                              gripper_params_,

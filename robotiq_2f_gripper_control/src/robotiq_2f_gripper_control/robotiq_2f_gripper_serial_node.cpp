@@ -67,29 +67,14 @@ int main(int argc, char **argv) {
   GripperOutput test;
 
   test = client.readOutputs();
-  ROS_WARN("rACT %d", test.rACT);
-  ROS_WARN("rGTO %d", test.rGTO);
-  ROS_WARN("rATR %d", test.rATR);
-  ROS_WARN("rPR %d", test.rPR);
-  ROS_WARN("rSP %d", test.rSP);
-  ROS_WARN("rFR %d", test.rFR);
 
   GripperInput test_i;
 
   test_i = client.readInputs();
-  ROS_WARN("gACT %d", test_i.gACT);
-  ROS_WARN("gGTO %d", test_i.gGTO);
-  ROS_WARN("gSTA %d", test_i.gSTA);
-  ROS_WARN("gOBJ %d", test_i.gOBJ);
-  ROS_WARN("gFLT %d", test_i.gFLT);
-  ROS_WARN("gPR %d", test_i.gPR);
-  ROS_WARN("gPO %d", test_i.gPO);
-  ROS_WARN("gCU %d", test_i.gCU);
 
   // conditionally activate the gripper
   if (activate) {
     // Check to see if resetting is required? Or always reset?
-    ROS_WARN("ACTIVATE");
     GripperOutput out;
     out.rACT = 0x0;
     // out.rGTO = 0x1;
