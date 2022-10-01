@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+
+<launch>
+  <arg name="gripper_name" default="gripper" />
+  <arg name="position" default="0.0" /> <!-- Fully Open = 0.0, Closed = 0.792-->
+  <arg name="max_effort" default="100.0" />
+  <arg name="max_retry" default="10" />
+  <arg name="timeout" default="1" />
+
+  <node name="robotiq_2f_gripper_action_client" pkg="robotiq_2f_gripper_action_server"
+    type="robotiq_2f_gripper_action_client_send_goal" output="screen">
+    <param name="gripper_name" type="str" value="$(arg gripper_name)" />
+    <param name="position" type="double" value="$(arg position)" />
+    <param name="max_effort" type="double" value="$(arg max_effort)" />
+    <param name="max_retry" type="int" value="$(arg max_retry)" />
+    <param name="timeout" type="double" value="$(arg timeout)" />
+  </node>
+
+</launch>
