@@ -48,14 +48,14 @@
             points the opposite way away from the connector.
         - The Y axis uses the right hand thumb rule according to X-Z. -->
     <joint name="${prefix}frame_id_joint" type="fixed">
-      <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
+      <origin xyz="0.0348 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
       <parent link="${prefix}robotside" />
       <child link="${prefix}frame_id" />
     </joint>
 
     <!-- Revert to ROS convention orientation -->
     <joint name="${prefix}toolside_joint" type="fixed">
-      <origin xyz="0 0 0.0348" rpy="0 ${-pi/2} ${pi/2}" />
+      <origin xyz="0 0 0" rpy="0 ${-pi/2} ${pi/2}" />
       <parent link="${prefix}frame_id" />
       <child link="${prefix}toolside" />
     </joint>
