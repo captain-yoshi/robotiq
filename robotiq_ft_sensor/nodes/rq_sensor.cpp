@@ -42,6 +42,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "ros/ros.h"
 #include "std_msgs/String.h"
@@ -49,6 +50,8 @@
 #include "robotiq_ft_sensor/rq_sensor_state.h"
 #include "robotiq_ft_sensor/ft_sensor.h"
 #include "robotiq_ft_sensor/sensor_accessor.h"
+
+#include "robotiq_ft_sensor/low_pass_filter.h"
 
 typedef robotiq_ft_sensor::sensor_accessor::Request Request;
 static int max_retries_(100);
@@ -184,6 +187,19 @@ static robotiq_ft_sensor::ft_sensor get_data(void)
     return msgStream;
 }
 
+
+
+void tareDownForceFromThreshold(double threshold, geometry_msgs::WrenchStamped& msg)
+{
+    if(abs(msg.wrench.force.x) < threshold)
+        msg.wrench.force.x = 0.0;
+    if(abs(msg.wrench.force.y) < threshold)
+        msg.wrench.force.y = 0.0;
+    if(abs(msg.wrench.force.z) < threshold)
+        msg.wrench.force.z = 0.0;
+}
+
+
 int main(int argc, char** argv)
 {
     ros::init(argc, argv, "robotiq_ft_sensor");
@@ -224,11 +240,24 @@ int main(int argc, char** argv)
         wait_for_other_connection();
     }
 
-    ros::Publisher wrench_pub = nh.advertise<geometry_msgs::WrenchStamped>("wrench", 512);
+    ros::Publisher wrench_pub = nh.advertise<geometry_msgs::WrenchStamped>("wrench", 3);
+    ros::Publisher wrench_filtered_pub = nh.advertise<geometry_msgs::WrenchStamped>("wrench_filtered", 3);
     ros::ServiceServer service = nh.advertiseService("robotiq_ft_sensor_acc", receiverCallback);
 
     geometry_msgs::WrenchStamped wrenchMsg;
+    geometry_msgs::WrenchStamped wrenchFilteredMsg;
     nh.param<std::string>("frame_id", wrenchMsg.header.frame_id, "robotiq_ft_frame_id");
+    nh.param<std::string>("filtered_frame_id", wrenchFilteredMsg.header.frame_id, "robotiq_ft_filtered_frame_id");
+
+    std::vector<low_pass_force_torque_sensor_controller::LowPassFilter> filters_;
+
+    double low_pass_filter_coeff = 10;
+    filters_.clear();
+    for (size_t i = 0; i < 6; ++i)
+    {
+      filters_.emplace_back(low_pass_filter_coeff);
+    }
+
 
     ROS_INFO("Starting Sensor");
     while (ros::ok())
@@ -254,7 +283,21 @@ int main(int argc, char** argv)
                 wrenchMsg.wrench.torque.x = msgStream.Mx;
                 wrenchMsg.wrench.torque.y = msgStream.My;
                 wrenchMsg.wrench.torque.z = msgStream.Mz;
+
+                //tareDownForceFromThreshold(2.0, wrenchMsg);
+
                 wrench_pub.publish(wrenchMsg);
+
+                // send filtered message
+                wrenchFilteredMsg.header.stamp = wrenchMsg.header.stamp;
+                wrenchFilteredMsg.wrench.force.x  = filters_[0].filter(wrenchMsg.wrench.force.x);
+                wrenchFilteredMsg.wrench.force.y  = filters_[1].filter(wrenchMsg.wrench.force.y);
+                wrenchFilteredMsg.wrench.force.z  = filters_[2].filter(wrenchMsg.wrench.force.z);
+                wrenchFilteredMsg.wrench.torque.x = filters_[3].filter(wrenchMsg.wrench.torque.x);
+                wrenchFilteredMsg.wrench.torque.y = filters_[4].filter(wrenchMsg.wrench.torque.y);
+                wrenchFilteredMsg.wrench.torque.z = filters_[5].filter(wrenchMsg.wrench.torque.z);
+
+                wrench_filtered_pub.publish(wrenchFilteredMsg);
             }
         }
 

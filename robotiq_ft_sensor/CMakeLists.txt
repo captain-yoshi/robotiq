@@ -35,7 +35,7 @@ include_directories(
 )
 
 # make the executables
-add_executable(rq_sensor nodes/rq_sensor.cpp src/rq_sensor_com.cpp src/rq_sensor_state.cpp)
+add_executable(rq_sensor nodes/rq_sensor.cpp src/rq_sensor_com.cpp src/rq_sensor_state.cpp src/low_pass_filter.cpp)
 add_dependencies(rq_sensor ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(rq_sensor ${catkin_LIBRARIES})
 
