@@ -43,6 +43,13 @@ add_executable(rq_test_sensor nodes/rq_test_sensor.cpp)
 add_dependencies(rq_test_sensor ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(rq_test_sensor ${catkin_LIBRARIES})
 
-install(TARGETS rq_sensor rq_test_sensor
+add_executable(rq_tare_wrench nodes/rq_tare_wrench.cpp)
+add_dependencies(rq_tare_wrench ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(rq_tare_wrench ${catkin_LIBRARIES})
+
+install(TARGETS
+  rq_sensor
+  rq_test_sensor
+  rq_tare_wrench
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
