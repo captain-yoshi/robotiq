@@ -1,22 +1,24 @@
 <?xml version="1.0" ?>
 
 <launch>
-  <arg name="gripper_name" default="gripper" />
-  <arg name="min_gap" default="0" /> <!-- TODO min_joint_pos-->
-  <arg name="max_gap" default="0.792" /> <!-- TODO max_joint_pos-->
-  <arg name="min_effort" default="0.0" />
-  <arg name="max_effort" default="100.0" />
+
+  <arg name="action_server_name" default="/robotiq/gripper" />
+  <arg name="robotiq_2f_control_node" default="robotiq_2f_gripper_control" />
+  <arg name="min_gap_size" default="0" /> <!-- TODO min_joint_pos-->
+  <arg name="max_gap_size" default="0.140" /> <!-- TODO max_joint_pos-->
+  <arg name="min_speed" default="0.03" />
+  <arg name="max_speed" default="0.25" />
 
   <node name="robotiq_2f_gripper_action_server" pkg="robotiq_2f_gripper_action_server"
     type="robotiq_2f_gripper_action_server_node" output="screen">
-    <param name="gripper_name" type="str" value="$(arg gripper_name)" />
-    <param name="min_gap" type="double" value="$(arg min_gap)" />
-    <param name="max_gap" type="double" value="$(arg max_gap)" />
-    <param name="min_effort" type="double" value="$(arg min_effort)" />
-    <param name="max_effort" type="double" value="$(arg max_effort)" />
+    <param name="action_server_name" type="str" value="$(arg action_server_name)" />
+    <param name="min_gap_size" type="double" value="$(arg min_gap_size)" />
+    <param name="max_gap_size" type="double" value="$(arg max_gap_size)" />
+    <param name="min_speed" type="double" value="$(arg min_speed)" />
+    <param name="max_speed" type="double" value="$(arg max_speed)" />
 
-    <remap from="input" to="$(arg gripper_name)/input" />
-    <remap from="output" to="$(arg gripper_name)/output" />
+    <remap from="input"  to="$(arg robotiq_2f_control_node)/input" />
+    <remap from="output" to="$(arg robotiq_2f_control_node)/output" />
   </node>
 
 </launch>
