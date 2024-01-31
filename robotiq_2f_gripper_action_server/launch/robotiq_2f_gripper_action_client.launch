@@ -1,18 +1,19 @@
 <?xml version="1.0" ?>
 
 <launch>
-  <arg name="gripper_name" default="gripper" />
-  <arg name="position" default="0.0" /> <!-- Fully Open = 0.0, Closed = 0.792-->
-  <arg name="max_effort" default="100.0" />
-  <arg name="max_retry" default="10" />
-  <arg name="timeout" default="1" />
+  <arg name="action_server_name" default="/robotiq/gripper" />
+  <arg name="gap_size" default="0.0" />   <!-- Fully Open = 0.14, Closed = 0-->
+  <arg name="speed" default="0.03" />     <!-- 0.03 to 0.25 -->
+  <arg name="effort_scaling" default="0.0" /> <!-- 0.0 to 1.0 -->
+  <arg name="timeout" default="10" />
+
 
   <node name="robotiq_2f_gripper_action_client" pkg="robotiq_2f_gripper_action_server"
-    type="robotiq_2f_gripper_action_client_send_goal" output="screen">
-    <param name="gripper_name" type="str" value="$(arg gripper_name)" />
-    <param name="position" type="double" value="$(arg position)" />
-    <param name="max_effort" type="double" value="$(arg max_effort)" />
-    <param name="max_retry" type="int" value="$(arg max_retry)" />
+    type="robotiq_2f_gripper_action_client_node" output="screen">
+    <param name="action_server_name" type="str" value="$(arg action_server_name)" />
+    <param name="gap_size" type="double" value="$(arg gap_size)" />
+    <param name="speed" type="double" value="$(arg speed)" />
+    <param name="effort_scaling" type="double" value="$(arg effort_scaling)" />
     <param name="timeout" type="double" value="$(arg timeout)" />
   </node>
 

@@ -36,48 +36,27 @@ add_dependencies(robotiq_2f_gripper_action_server_node
    ${catkin_LIBRARIES}
  )
 
- # The test server
-add_executable(robotiq_2f_gripper_action_server_client_test
-  src/robotiq_2f_gripper_action_server_client_test.cpp
+
+add_executable(robotiq_2f_gripper_action_client_node
+  src/robotiq_2f_gripper_action_client_node.cpp
 )
 
-add_dependencies(robotiq_2f_gripper_action_server_client_test
+add_dependencies(robotiq_2f_gripper_action_client_node
   robotiq_2f_gripper_action_server_generate_messages_cpp
   ${robotiq_action_server_EXPORTED_TARGETS})
 
-target_link_libraries(robotiq_2f_gripper_action_server_client_test
-  ${catkin_LIBRARIES}
-)
-
-add_executable(robotiq_2f_gripper_action_client_send_goal
-  src/robotiq_2f_gripper_action_client_send_goal.cpp
-)
-
-add_dependencies(robotiq_2f_gripper_action_client_send_goal
-  robotiq_2f_gripper_action_server_generate_messages_cpp
-  ${robotiq_action_server_EXPORTED_TARGETS})
-
- target_link_libraries(robotiq_2f_gripper_action_client_send_goal
+ target_link_libraries(robotiq_2f_gripper_action_client_node
    ${catkin_LIBRARIES}
  )
 
-install(TARGETS robotiq_2f_gripper_action_server_node
+install(TARGETS
+  robotiq_2f_gripper_action_server_node
+  robotiq_2f_gripper_action_client_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
- install(TARGETS robotiq_2f_gripper_action_server_client_test
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
- )
-
-install(TARGETS robotiq_2f_gripper_action_client_send_goal
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
- )
 
 install(DIRECTORY include/${PROJECT_NAME}/
    DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
