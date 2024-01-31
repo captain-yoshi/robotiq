@@ -83,10 +83,11 @@ GripperOutput goalToRegisterState(const GripperCommandGoal &goal,
 template <typename T>
 T registerStateToResultT(const GripperInput &input,
                          const Robotiq2FGripperParams &params,
-                         double target_rPR) {
+                         uint8_t target_gap_count, uint8_t target_force_count) {
 
   T result;
 
+  // current gap position
   if (input.gPO <= 15) {
     result.position = (static_cast<double>(input.gPO) - 257.4) / -1810.890525;
   } else if (input.gPO <= 77) {
@@ -96,13 +97,25 @@ T registerStateToResultT(const GripperInput &input,
     result.position = (static_cast<double>(input.gPO) - 226.84558) / -1479.31;
   }
 
-  std::cout << "rPR = " << target_rPR << std::endl;
-  std::cout << "gPO = " << +input.gPO << std::endl;
+  // approximate effort (~10 to 125 N)
+  if (input.gOBJ == 0x0 || input.gOBJ == 0x3) {
+    // 0x0 = Fingers are in motion towards requested position. No object
+    // detected.
+    // 0x3 = Fingers are at requested position. No object detected or
+    // object has been loss / dropped.
+    result.effort = 0.0;
+  } else {
+    std::cout << +target_force_count << std::endl;
+    result.effort =
+        static_cast<double>(target_force_count) * (115.0 / 255.0) + 10.0;
+  }
 
-  // result.effort = input.gCU * eff_per_tick + params.min_effort_;
+  // has the gripper stalled ?
   result.stalled = input.gOBJ == 0x1 || input.gOBJ == 0x2;
 
-  double gap_error_counts = std::abs(target_rPR - input.gPO);
+  // has gripper reached the goal ^
+  double gap_error_counts = std::abs(static_cast<double>(target_gap_count) -
+                                     static_cast<double>(input.gPO));
 
   // each count represents about 0.6 mm of resolution
   if (gap_error_counts < 9) {
@@ -119,17 +132,18 @@ T registerStateToResultT(const GripperInput &input,
 // source
 inline GripperCommandResult
 registerStateToResult(const GripperInput &input,
-                      const Robotiq2FGripperParams &params, double target_gap) {
-  return registerStateToResultT<GripperCommandResult>(input, params,
-                                                      target_gap);
+                      const Robotiq2FGripperParams &params,
+                      uint8_t target_gap_count, uint8_t target_force_count) {
+  return registerStateToResultT<GripperCommandResult>(
+      input, params, target_gap_count, target_force_count);
 }
 
 inline GripperCommandFeedback
 registerStateToFeedback(const GripperInput &input,
                         const Robotiq2FGripperParams &params,
-                        double target_gap) {
-  return registerStateToResultT<GripperCommandFeedback>(input, params,
-                                                        target_gap);
+                        uint8_t target_gap_count, uint8_t target_force_count) {
+  return registerStateToResultT<GripperCommandFeedback>(
+      input, params, target_gap_count, target_force_count);
 }
 
 } // namespace
@@ -173,7 +187,8 @@ void Robotiq2FGripperActionServer::goalCB() {
   } catch (BadArgumentsError &e) {
 
     as_.setAborted(registerStateToResult(current_reg_state_, gripper_params_,
-                                         goal_reg_state_.rPR));
+                                         goal_reg_state_.rPR,
+                                         goal_reg_state_.rFR));
 
     ROS_INFO("%s No goal issued to gripper", action_name_.c_str());
   }
@@ -210,69 +225,22 @@ void Robotiq2FGripperActionServer::analysisCB(
     ROS_WARN("%s faulted with code: %x", action_name_.c_str(),
              current_reg_state_.gFLT);
     as_.setAborted(registerStateToResult(current_reg_state_, gripper_params_,
-                                         goal_reg_state_.rPR));
+                                         goal_reg_state_.rPR,
+                                         goal_reg_state_.rFR));
   } else if (current_reg_state_.gGTO && current_reg_state_.gOBJ &&
              current_reg_state_.gPR == goal_reg_state_.rPR) {
 
     as_.setSucceeded(registerStateToResult(current_reg_state_, gripper_params_,
-                                           goal_reg_state_.rPR));
+                                           goal_reg_state_.rPR,
+                                           goal_reg_state_.rFR));
 
-    // // If commanded to move and if at a goal state and if the position
-    // request
-    // // matches the echo'd PR, we're done with a move
-
-    // // TODO change because we have 3 functions depending on the position
-    // double max_tol =
-    //     ((goal_reg_state_.rPR - gripper_params_.pos_offset +
-    //       gripper_params_.pos_nl_offset - gripper_params_.pos_tol_closed) -
-    //      228.260379) /
-    //     -1526.308005;
-    // double min_tol =
-    //     ((goal_reg_state_.rPR - gripper_params_.pos_offset +
-    //       gripper_params_.pos_nl_offset + gripper_params_.pos_tol_open) -
-    //      228.260379) /
-    //     -1526.308005;
-    // double curr_pos = (current_reg_state_.gPO - 228.260379) / -1526.308005;
-
-    // // Enable thin detection object not detect by robotiq (No need to check
-    // // against gOBJ = 0x03)
-    // if (static_cast<int16_t>(current_reg_state_.gPO) >=
-    //         (static_cast<int16_t>(goal_reg_state_.rPR) -
-    //          gripper_params_.pos_offset + gripper_params_.pos_nl_offset -
-    //          gripper_params_.pos_tol_closed) &&
-    //     static_cast<int16_t>(current_reg_state_.gPO) <=
-    //         (static_cast<int16_t>(goal_reg_state_.rPR) -
-    //          gripper_params_.pos_offset + gripper_params_.pos_nl_offset +
-    //          gripper_params_.pos_tol_open)) {
-
-    //   as_.setSucceeded(registerStateToResult(
-    //       current_reg_state_, gripper_params_, goal_reg_state_.rPR));
-    // }
-    // // Throw error because
-    // else {
-    //   ROS_WARN("gPO = %d, rPR = %d, Compare1 = %d, Compare2 = %d",
-    //            current_reg_state_.gPO, goal_reg_state_.rPR,
-    //            (goal_reg_state_.rPR - gripper_params_.pos_offset +
-    //             gripper_params_.pos_nl_offset -
-    //             gripper_params_.pos_tol_closed),
-    //            (goal_reg_state_.rPR - gripper_params_.pos_offset +
-    //             gripper_params_.pos_nl_offset +
-    //             gripper_params_.pos_tol_open));
-    //   ROS_WARN("Error: Gripper position MUST be between %f and %f meters. "
-    //            "Current position is %f meters.",
-    //            min_tol, max_tol, curr_pos);
-    //   as_.setSucceeded(registerStateToResult(
-    //       current_reg_state_, gripper_params_, goal_reg_state_.rPR));
-    //   // as_.setAborted(registerStateToResult(current_reg_state_,
-    //   //                                      gripper_params_,
-    //   //                                      goal_reg_state_.rPR));
-    // }
   }
 
   else {
     // Publish feedback
-    as_.publishFeedback(registerStateToFeedback(
-        current_reg_state_, gripper_params_, goal_reg_state_.rPR));
+    as_.publishFeedback(
+        registerStateToFeedback(current_reg_state_, gripper_params_,
+                                goal_reg_state_.rPR, goal_reg_state_.rFR));
   }
 }
 
