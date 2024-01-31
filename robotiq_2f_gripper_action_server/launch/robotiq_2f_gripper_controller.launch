@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+
+<launch>
+
+  <include file="$(find robotiq_2f_gripper_control)/launch/robotiq_2f_gripper_serial.launch">
+    <arg name="slave_number" default="9" />
+    <arg name="activate" default="True" />
+    <arg name="port" default="/dev/robotiq_2f_140" />
+  </include>
+
+</launch>
