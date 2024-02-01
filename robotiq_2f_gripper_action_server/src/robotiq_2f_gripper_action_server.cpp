@@ -201,8 +201,6 @@ void Robotiq2FGripperActionServer::goalCB() {
     as_.setAborted(registerStateToResult(current_reg_state_, gripper_params_,
                                          goal_reg_state_.rPR,
                                          goal_reg_state_.rFR));
-
-    ROS_INFO("%s No goal issued to gripper", action_name_.c_str());
   }
 }
 
