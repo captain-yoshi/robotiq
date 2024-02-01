@@ -3,6 +3,7 @@
 <launch>
   <arg name="action_server_name" default="/robotiq/gripper" />
   <arg name="gap_size" default="0.0" />   <!-- Fully Open = 0.14, Closed = 0-->
+  <arg name="gap_size_offset" default="0.3" />   <!-- Add relative offset to firmly grasp an object -->
   <arg name="speed" default="0.03" />     <!-- 0.03 to 0.25 -->
   <arg name="effort_scaling" default="0.0" /> <!-- 0.0 to 1.0 -->
   <arg name="timeout" default="10" />
@@ -12,6 +13,7 @@
     type="robotiq_2f_gripper_action_client_node" output="screen">
     <param name="action_server_name" type="str" value="$(arg action_server_name)" />
     <param name="gap_size" type="double" value="$(arg gap_size)" />
+    <param name="gap_size_offset" type="double" value="$(arg gap_size_offset)" />
     <param name="speed" type="double" value="$(arg speed)" />
     <param name="effort_scaling" type="double" value="$(arg effort_scaling)" />
     <param name="timeout" type="double" value="$(arg timeout)" />

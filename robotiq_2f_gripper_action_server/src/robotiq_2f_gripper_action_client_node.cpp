@@ -10,12 +10,14 @@ int main(int argc, char **argv) {
 
   std::string action_server_name;
   double gap_size;
+  double gap_size_offset;
   double speed;
   double effort_scaling;
   double timeout;
 
   pnh.getParam("action_server_name", action_server_name);
   pnh.getParam("gap_size", gap_size);
+  pnh.getParam("gap_size_offset", gap_size_offset);
   pnh.getParam("speed", speed);
   pnh.getParam("effort_scaling", effort_scaling);
   pnh.getParam("timeout", timeout);
@@ -37,7 +39,8 @@ int main(int argc, char **argv) {
 
   // send a goal to the action
   control_msgs::Robotiq2fGripperCommandGoal goal;
-  goal.command.position = gap_size;
+  goal.command.gap_size = gap_size;
+  goal.command.gap_size_offset = gap_size_offset;
   goal.command.speed = speed;
   goal.command.effort_scaling = effort_scaling;
 
@@ -54,7 +57,7 @@ int main(int argc, char **argv) {
       auto result = ac.getResult();
 
       std::cout << "==== Results ====" << std::endl;
-      std::cout << "current gap size = " << result->position << std::endl;
+      std::cout << "current gap size = " << result->gap_size << std::endl;
       std::cout << "current effort   = " << result->effort << std::endl;
       std::cout << "reached goal     = " << +result->reached_goal << std::endl;
       std::cout << "stalled          = " << +result->stalled << std::endl;
