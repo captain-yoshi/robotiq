@@ -5,6 +5,9 @@
 
 #include "robotiq_2f_gripper_action_server/robotiq_2f_gripper_action_server.h"
 #include <math.h>
+
+#include <algorithm>
+
 // To keep the fully qualified names managable
 
 // Anonymous namespaces are file local -> sort of like global static objects
@@ -81,6 +84,39 @@ GripperOutput goalToRegisterState(const GripperCommandGoal &goal,
 
   // Convert gap position to rPR
   result.rPR = gap_size_to_count(goal.command.gap_size);
+
+  // Apply position offset
+  if (goal.command.gap_size_offset != 0.0) {
+
+    uint8_t gap_count_offsetted;
+
+    // Closing gripper -> 255 counts
+    if (current_state.gPO < result.rPR) {
+
+      double gap_size_offsetted =
+          std::clamp(goal.command.gap_size - goal.command.gap_size_offset,
+                     params.min_gap_size, params.max_gap_size);
+
+      gap_count_offsetted = gap_size_to_count(gap_size_offsetted);
+
+    }
+    // Opening gripper -> 0 counts
+    else if (current_state.gPO > result.rPR) {
+      double gap_size_offsetted =
+          std::clamp(goal.command.gap_size + goal.command.gap_size_offset,
+                     params.min_gap_size, params.max_gap_size);
+
+      gap_count_offsetted = gap_size_to_count(gap_size_offsetted);
+    }
+    // Correct location
+    else {
+      ROS_ERROR(
+          "Requested position with offset, but already at good position. "
+          "Cannot determine which way to go, e.g. internal vs external grasp.");
+      throw BadArgumentsError();
+    }
+
+    result.rPR = gap_count_offsetted;
   }
 
   // Convert speed to rSP
