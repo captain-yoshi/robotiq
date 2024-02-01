@@ -84,6 +84,7 @@ GripperOutput goalToRegisterState(const GripperCommandGoal &goal,
 
   // Convert gap position to rPR
   result.rPR = gap_size_to_count(goal.command.gap_size);
+  params.gap_size_count_wo_offset = result.rPR;
 
   // Apply position offset
   if (goal.command.gap_size_offset != 0.0) {
@@ -160,9 +161,10 @@ T registerStateToResultT(const GripperInput &input,
   // has the gripper stalled ?
   result.stalled = input.gOBJ == 0x1 || input.gOBJ == 0x2;
 
-  // has gripper reached the goal ^
-  double gap_error_counts = std::abs(static_cast<double>(target_gap_count) -
-                                     static_cast<double>(input.gPO));
+  // has gripper reached the goal (wo the offset) ?
+  double gap_error_counts =
+      std::abs(static_cast<double>(params.gap_size_count_wo_offset) -
+               static_cast<double>(input.gPO));
 
   // each count represents about 0.6 mm of resolution
   if (gap_error_counts < 9) {
