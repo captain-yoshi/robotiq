@@ -18,6 +18,35 @@ using namespace robotiq_2f_gripper_action_server;
 */
 struct BadArgumentsError {};
 
+uint8_t gap_size_to_count(double gap_size) {
+  uint8_t count;
+
+  // Gripper has quasi-linear position (function determined by testing
+  // different position)
+  if (gap_size <= 0.1) { // 78 to 255
+    count = static_cast<uint8_t>(-1479.31 * gap_size + 226.84558);
+  } else if (gap_size >= 0.134) { // 0 to 15 Non-linear portition
+
+    count = static_cast<uint8_t>(-1810.890525 * gap_size + 257.4);
+  } else { // 15 to 77
+    count = static_cast<uint8_t>(-1661.8310875 * gap_size + 245.66409);
+  }
+  return count;
+}
+
+double count_to_gap_size(uint8_t count) {
+  double gap_size;
+
+  if (count <= 15) {
+    gap_size = (static_cast<double>(count) - 257.4) / -1810.890525;
+  } else if (count <= 77) {
+    gap_size = (static_cast<double>(count) - 245.66409) / -1661.8310875;
+  } else {
+    gap_size = (static_cast<double>(count) - 226.84558) / -1479.31;
+  }
+  return gap_size;
+}
+
 GripperOutput goalToRegisterState(const GripperCommandGoal &goal,
                                   Robotiq2FGripperParams &params,
                                   const uint8_t curr_reg_state_gPO) {
@@ -51,18 +80,7 @@ GripperOutput goalToRegisterState(const GripperCommandGoal &goal,
   }
 
   // Convert gap position to rPR
-  // Gripper has quasi-linear position (function determined by testing different
-  // position)
-  if (goal.command.position <= 0.1) { // 78 to 255
-    result.rPR =
-        static_cast<uint8_t>(-1479.31 * goal.command.position + 226.84558);
-  } else if (goal.command.position >= 0.134) { // 0 to 15 Non-linear portition
-
-    result.rPR =
-        static_cast<uint8_t>(-1810.890525 * goal.command.position + 257.4);
-  } else { // 15 to 77
-    result.rPR =
-        static_cast<uint8_t>(-1661.8310875 * goal.command.position + 245.66409);
+  result.rPR = gap_size_to_count(goal.command.gap_size);
   }
 
   // Convert speed to rSP
@@ -88,14 +106,7 @@ T registerStateToResultT(const GripperInput &input,
   T result;
 
   // current gap position
-  if (input.gPO <= 15) {
-    result.position = (static_cast<double>(input.gPO) - 257.4) / -1810.890525;
-  } else if (input.gPO <= 77) {
-    result.position =
-        (static_cast<double>(input.gPO) - 245.66409) / -1661.8310875;
-  } else {
-    result.position = (static_cast<double>(input.gPO) - 226.84558) / -1479.31;
-  }
+  result.gap_size = count_to_gap_size(input.gPO);
 
   // approximate effort (~10 to 125 N)
   if (input.gOBJ == 0x0 || input.gOBJ == 0x3) {
