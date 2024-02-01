@@ -26,4 +26,12 @@ double gap_to_joint_pos(double gap_d) {
   return j_pos;
 }
 
+double joint_pos_to_gap(double j_pos) {
+  double theta_offset = acos(0.06691 / 0.1);
+
+  double gap_d = 2 * (0.1 * cos(j_pos + theta_offset) - (0.00735 - 0.0127));
+
+  return gap_d;
+}
+
 } // namespace Robotiq2f140
