@@ -154,7 +154,6 @@ T registerStateToResultT(const GripperInput &input,
     // object has been loss / dropped.
     result.effort = 0.0;
   } else {
-    std::cout << +target_force_count << std::endl;
     result.effort = static_cast<double>(goal.rFR) * (115.0 / 255.0) + 10.0;
   }
 
