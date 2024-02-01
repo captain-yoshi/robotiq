@@ -49,7 +49,7 @@ double count_to_gap_size(uint8_t count) {
 
 GripperOutput goalToRegisterState(const GripperCommandGoal &goal,
                                   Robotiq2FGripperParams &params,
-                                  const uint8_t curr_reg_state_gPO) {
+                                  const GripperInput &current_state) {
 
   GripperOutput result;
   result.rACT = 0x1; // active gripper
@@ -57,10 +57,10 @@ GripperOutput goalToRegisterState(const GripperCommandGoal &goal,
   result.rATR = 0x0; // No emergency release
 
   // Check position gap range
-  if (goal.command.position > params.max_gap_size ||
-      goal.command.position < params.min_gap_size) {
+  if (goal.command.gap_size > params.max_gap_size ||
+      goal.command.gap_size < params.min_gap_size) {
     ROS_WARN("Goal gripper gap size is out of range(%f to %f): %f m",
-             params.min_gap_size, params.max_gap_size, goal.command.position);
+             params.min_gap_size, params.max_gap_size, goal.command.gap_size);
     throw BadArgumentsError();
   }
 
@@ -95,8 +95,9 @@ GripperOutput goalToRegisterState(const GripperCommandGoal &goal,
 } // namespace
 
 /*  This function is templatized because both GripperCommandResult and
-   GripperCommandFeedback consist of the same fields yet have different types.
-   Templates here act as a "duck typing" mechanism to avoid code duplication.
+   GripperCommandFeedback consist of the same fields yet have different
+   types. Templates here act as a "duck typing" mechanism to avoid code
+   duplication.
 */
 template <typename T>
 T registerStateToResultT(const GripperInput &input,
@@ -192,8 +193,8 @@ void Robotiq2FGripperActionServer::goalCB() {
   }
 
   try {
-    goal_reg_state_ = goalToRegisterState(current_goal, gripper_params_,
-                                          current_reg_state_.gPO);
+    goal_reg_state_ =
+        goalToRegisterState(current_goal, gripper_params_, current_reg_state_);
     goal_pub_.publish(goal_reg_state_);
   } catch (BadArgumentsError &e) {
 
