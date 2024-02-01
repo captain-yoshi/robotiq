@@ -138,7 +138,7 @@ GripperOutput goalToRegisterState(const GripperCommandGoal &goal,
 template <typename T>
 T registerStateToResultT(const GripperInput &input,
                          const Robotiq2FGripperParams &params,
-                         uint8_t target_gap_count, uint8_t target_force_count) {
+                         const GripperOutput &goal) {
 
   T result;
 
@@ -154,8 +154,7 @@ T registerStateToResultT(const GripperInput &input,
     result.effort = 0.0;
   } else {
     std::cout << +target_force_count << std::endl;
-    result.effort =
-        static_cast<double>(target_force_count) * (115.0 / 255.0) + 10.0;
+    result.effort = static_cast<double>(goal.rFR) * (115.0 / 255.0) + 10.0;
   }
 
   // has the gripper stalled ?
@@ -181,17 +180,15 @@ T registerStateToResultT(const GripperInput &input,
 inline GripperCommandResult
 registerStateToResult(const GripperInput &input,
                       const Robotiq2FGripperParams &params,
-                      uint8_t target_gap_count, uint8_t target_force_count) {
-  return registerStateToResultT<GripperCommandResult>(
-      input, params, target_gap_count, target_force_count);
+                      const GripperOutput &goal) {
+  return registerStateToResultT<GripperCommandResult>(input, params, goal);
 }
 
 inline GripperCommandFeedback
 registerStateToFeedback(const GripperInput &input,
                         const Robotiq2FGripperParams &params,
-                        uint8_t target_gap_count, uint8_t target_force_count) {
-  return registerStateToResultT<GripperCommandFeedback>(
-      input, params, target_gap_count, target_force_count);
+                        const GripperOutput &goal) {
+  return registerStateToResultT<GripperCommandFeedback>(input, params, goal);
 }
 
 } // namespace
@@ -235,8 +232,7 @@ void Robotiq2FGripperActionServer::goalCB() {
   } catch (BadArgumentsError &e) {
 
     as_.setAborted(registerStateToResult(current_reg_state_, gripper_params_,
-                                         goal_reg_state_.rPR,
-                                         goal_reg_state_.rFR));
+                                         goal_reg_state_));
   }
 }
 
@@ -271,22 +267,19 @@ void Robotiq2FGripperActionServer::analysisCB(
     ROS_WARN("%s faulted with code: %x", action_name_.c_str(),
              current_reg_state_.gFLT);
     as_.setAborted(registerStateToResult(current_reg_state_, gripper_params_,
-                                         goal_reg_state_.rPR,
-                                         goal_reg_state_.rFR));
+                                         goal_reg_state_));
   } else if (current_reg_state_.gGTO && current_reg_state_.gOBJ &&
              current_reg_state_.gPR == goal_reg_state_.rPR) {
 
     as_.setSucceeded(registerStateToResult(current_reg_state_, gripper_params_,
-                                           goal_reg_state_.rPR,
-                                           goal_reg_state_.rFR));
+                                           goal_reg_state_));
 
   }
 
   else {
     // Publish feedback
-    as_.publishFeedback(
-        registerStateToFeedback(current_reg_state_, gripper_params_,
-                                goal_reg_state_.rPR, goal_reg_state_.rFR));
+    as_.publishFeedback(registerStateToFeedback(
+        current_reg_state_, gripper_params_, goal_reg_state_));
   }
 }
 
