@@ -1,7 +1,4 @@
-
-#include <cmath>
-
-#pragma once
+#include <robotiq_2f_gripper_control/conversion.h>
 
 namespace Robotiq2f140 {
 
@@ -33,5 +30,4 @@ double joint_pos_to_gap(double j_pos) {
 
   return gap_d;
 }
-
 } // namespace Robotiq2f140

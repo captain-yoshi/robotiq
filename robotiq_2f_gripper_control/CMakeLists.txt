@@ -6,7 +6,7 @@ project(robotiq_2f_gripper_control)
 
 find_package(catkin REQUIRED COMPONENTS roscpp rospy message_generation )
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
+# set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
 #find_package(Modbus REQUIRED)
 
 set(MODBUS_INCLUDE_DIR /usr/include/modbus)
@@ -14,9 +14,9 @@ set(MODBUS_LIBRARIES /usr/lib/x86_64-linux-gnu/libmodbus.so)
 
 
 #set the default path for built executables to the "bin" directory
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+# set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+# set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 
 
@@ -42,13 +42,23 @@ generate_messages()
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-    CATKIN_DEPENDS rospy message_runtime roscpp
-    INCLUDE_DIRS include
+    LIBRARIES
+      ${PROJECT_NAME}
+    INCLUDE_DIRS
+      include
+    CATKIN_DEPENDS
+      rospy
+      message_runtime
+      roscpp
     #DEPENDS modbus
 )
 
-include_directories(include)
+add_library(${PROJECT_NAME}
+  src/conversion.cpp
+)
+
 include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
   ${MODBUS_INCLUDE_DIR}
 )
@@ -71,6 +81,12 @@ add_dependencies(robotiq_2f_gripper_serial_node robotiq_2f_gripper_control_gener
 
 # all install targets should use catkin DESTINATION variables
 # See http://ros.org/doc/groovy/api/catkin/html/adv_user_guide/variables.html
+
+install(TARGETS
+  ${PROJECT_NAME}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 install(PROGRAMS nodes/Robotiq2FGripperSimpleController.py nodes/Robotiq2FGripperStatusListener.py
     nodes/Robotiq2FGripperTcpNode.py nodes/Robotiq2FGripperRtuNode.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
