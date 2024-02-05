@@ -11,7 +11,7 @@ double compute_tcp_frame_offset(double gap_d) {
 
   double offset = sqrt(c * c - 0.00535 * 0.00535) - b;
 
-  return -offset; // ros frame convention
+  return offset; // ros frame convention
 }
 
 /// Gripper gap between 2 fingers to position in joint space
