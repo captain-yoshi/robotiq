@@ -10,8 +10,10 @@
 
     <link name="${prefix}robotside">
       <inertial>
-        <origin xyz="0.0154561980005085 -2.39874465854351E-08 -5.45937031412302E-05" rpy="0 0 0" />
-        <mass value="0.0984718698874868" />
+        <!-- Computed from Solidworks, matches the Robotiq datasheet (2021/06/23) -->
+        <origin xyz="0.01545 0 0" rpy="0 0 0" />
+        <!-- From Robotiq datasheet (2021/06/23) -->
+        <mass value="0.265" />
         <inertia
           ixx="0"
           ixy="0"
