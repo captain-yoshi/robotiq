@@ -9,16 +9,6 @@
     <xacro:read_model_data
       visual_parameters_file="${visual_parameters_file}"/>
 
-    <!-- Tool center point origin on the fingertip end when the gripper is fully closed -->
-    <xacro:macro name="tcp" params="prefix">
-      <link name="${prefix}tcp" />
-      <joint name="${prefix}tcp_joint" type="fixed">
-        <origin xyz="0.24127678495 0 0" rpy="0 0 0" />
-        <parent link="${prefix}base_link" />
-        <child link="${prefix}tcp" />
-      </joint>
-    </xacro:macro>
-
     <xacro:macro name="base_link" params="prefix">
       <link name="${prefix}base_link">
         <inertial>
@@ -296,7 +286,6 @@
     <xacro:base_link prefix="${prefix}"/>
     <xacro:finger_links prefix="${prefix}" fingerprefix="left"/>
     <xacro:finger_links prefix="${prefix}" fingerprefix="right"/>
-    <xacro:tcp prefix="${prefix}"/>
     <xacro:left_outer_knuckle_joint prefix="${prefix}"/>
     <xacro:right_outer_knuckle_joint prefix="${prefix}"/>
     <xacro:robotiq_2f_140_transmission prefix="${prefix}"/>
