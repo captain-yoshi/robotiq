@@ -29,6 +29,9 @@ subscribed to [/robotiq_ft_sensor/wrench]
 average rate: 100.016
 ```
 
+## License
+Distributed under the same terms as the upstream sources.
+
 ## Contribution
 Originally forked from multiple sources:
 - [Danfoa](https://github.com/Danfoa/robotiq_2finger_grippers)
